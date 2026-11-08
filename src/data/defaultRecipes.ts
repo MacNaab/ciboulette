@@ -1,0 +1,352 @@
+import { Recipe } from '../types/recipe';
+
+export const INITIAL_RECIPES: Recipe[] = [
+  {
+    id: 'rec_1',
+    title: 'Bœuf Bourguignon Traditionnel',
+    category: 'plats',
+    description: 'Le grand classique de la gastronomie française mijoté au vin rouge de Bourgogne, carottes tendres, champignons et lardons dorés.',
+    prepTime: 30,
+    cookTime: 180,
+    servings: 6,
+    difficulty: 'Moyen',
+    calories: 620,
+    macros: {
+      calories: 620,
+      proteins: 48,
+      carbs: 18,
+      fats: 28
+    },
+    image: '/src/assets/images/recipe_boeuf_bourguignon_1794085562307.jpg',
+    userRating: 5,
+    isFavorite: true,
+    isCustom: false,
+    createdAt: '2026-01-15T10:00:00.000Z',
+    chefTip: 'Pour une sauce onctueuse et brillante, faites réduire le vin de moitié avant d’ajouter le bouillon, et préparez-le la veille : réchauffé, il est encore meilleur.',
+    ingredients: [
+      { id: 'i1_1', name: 'Bœuf à braiser (paleron ou gîte)', quantity: 1200, unit: 'g' },
+      { id: 'i1_2', name: 'Lardons fumés', quantity: 200, unit: 'g' },
+      { id: 'i1_3', name: 'Carottes', quantity: 4, unit: 'pièces' },
+      { id: 'i1_4', name: 'Champignons de Paris', quantity: 300, unit: 'g' },
+      { id: 'i1_5', name: 'Petits oignons grelots', quantity: 12, unit: 'pièces' },
+      { id: 'i1_6', name: 'Vin rouge de Bourgogne', quantity: 75, unit: 'cl' },
+      { id: 'i1_7', name: 'Bouillon de bœuf', quantity: 50, unit: 'cl' },
+      { id: 'i1_8', name: 'Farine', quantity: 2, unit: 'c. à soupe' },
+      { id: 'i1_9', name: 'Gousses d’ail', quantity: 3, unit: 'pièces' },
+      { id: 'i1_10', name: 'Bouquet garni (thym, laurier)', quantity: 1, unit: 'pièce' },
+      { id: 'i1_11', name: 'Beurre demi-sel', quantity: 30, unit: 'g' },
+      { id: 'i1_12', name: 'Sel et poivre noir du moulin', quantity: null, unit: 'au goût' }
+    ],
+    instructions: [
+      'Coupez la viande de bœuf en cubes généreux d’environ 4 cm. Épongez-les soigneusement avec du papier absorbant.',
+      'Dans une cocotte en fonte chaude avec un filet d’huile et un peu de beurre, faites dorer les lardons puis réservez-les.',
+      'Saisissez les morceaux de viande à feu vif sur toutes leurs faces jusqu’à belle coloration ambrée. Saupoudrez la farine (singer) et remuez 2 minutes.',
+      'Ajoutez l’ail écrasé, puis mouillez avec le vin rouge et le bouillon. Portez à douce ébullition en raclant les sucs au fond de la cocotte.',
+      'Ajoutez le bouquet garni, couvrez et laissez mijoter à feu très doux (ou au four à 150°C) pendant 2h30.',
+      'Pendant ce temps, nettoyez les champignons et coupez-les en quatre. Épluchez les carottes et coupez-les en rondelles épaisses.',
+      'Faites revenir les oignons grelots et les champignons au beurre dans une poêle séparée.',
+      'Ajoutez les carottes, les champignons, les oignons et les lardons dans la cocotte pour les 30 dernières minutes de cuisson.',
+      'Rectifiez l’assaisonnement en sel et poivre. Servez bien chaud avec des tagliatelles fraîches ou des pommes de terre vapeur persillées.'
+    ]
+  },
+  {
+    id: 'rec_2',
+    title: 'Pavé de Saumon Croustillant, Asperges & Citron',
+    category: 'plats',
+    description: 'Un filet de saumon doré à la peau croustillante et chair fondante, escorté d’asperges vertes poêlées, aneth frais et zeste de citron.',
+    prepTime: 15,
+    cookTime: 12,
+    servings: 2,
+    difficulty: 'Facile',
+    calories: 480,
+    macros: {
+      calories: 480,
+      proteins: 42,
+      carbs: 6,
+      fats: 26
+    },
+    image: '/src/assets/images/recipe_salmon_crispy_1794085601448.jpg',
+    userRating: 4,
+    isFavorite: false,
+    isCustom: false,
+    createdAt: '2026-02-01T12:00:00.000Z',
+    chefTip: 'Pour une peau ultra croustillante, séchez parfaitement le saumon avec du papier absorbant et salez la peau juste avant de déposer côté peau sur la poêle bien chaude.',
+    ingredients: [
+      { id: 'i2_1', name: 'Pavés de saumon frais (avec peau)', quantity: 2, unit: 'pièces' },
+      { id: 'i2_2', name: 'Botte d’asperges vertes', quantity: 1, unit: 'botte' },
+      { id: 'i2_3', name: 'Citron bio (jus et zestes)', quantity: 1, unit: 'pièce' },
+      { id: 'i2_4', name: 'Aneth frais ciselé', quantity: 2, unit: 'c. à soupe' },
+      { id: 'i2_5', name: 'Huile d’olive vierge extra', quantity: 2, unit: 'c. à soupe' },
+      { id: 'i2_6', name: 'Beurre doux', quantity: 20, unit: 'g' },
+      { id: 'i2_7', name: 'Fleur de sel et poivre noir moulu', quantity: null, unit: 'au goût' }
+    ],
+    instructions: [
+      'Lavez les asperges vertes, cassez l’extrémité ligneuse et coupez-les en biseaux réguliers.',
+      'Chauffez une cuillère d’huile d’olive dans une poêle à feu moyen et faites sauter les asperges pendant 5 à 7 minutes jusqu’à ce qu’elles soient tendres mais encore croquantes. Salez et réservez.',
+      'Salez le saumon côté peau. Faites chauffer la poêle avec le reste d’huile à feu vif.',
+      'Déposez les pavés côté peau en appuyant doucement 30 secondes pour éviter qu’ils ne gondolent.',
+      'Laissez cuire 5 à 6 minutes côté peau sans y toucher, jusqu’à ce que les deux tiers de l’épaisseur blanchissent.',
+      'Ajoutez la noix de beurre, retournez délicatement côté chair pour 1 minute seulement tout en arrosant du beurre moussant.',
+      'Dressez immédiatement sur les asperges chaudes, parsemez d’aneth frais, de fleur de sel et arrosez d’un trait de jus de citron.'
+    ]
+  },
+  {
+    id: 'rec_3',
+    title: 'Tarte Tatin Caramélisée Maison',
+    category: 'desserts',
+    description: 'Pommes fondantes confites dans un caramel ambré au beurre demi-sel, renversées sur un feuilletage croustillant et doré.',
+    prepTime: 25,
+    cookTime: 45,
+    servings: 8,
+    difficulty: 'Moyen',
+    calories: 390,
+    macros: {
+      calories: 390,
+      proteins: 4,
+      carbs: 52,
+      fats: 18
+    },
+    image: '/src/assets/images/recipe_tarte_tatin_1794085563417.jpg',
+    userRating: 5,
+    isFavorite: true,
+    isCustom: false,
+    createdAt: '2026-02-10T16:00:00.000Z',
+    chefTip: 'Utilisez des pommes à chair ferme qui tiennent bien la cuisson comme la Reinette d’Armorique, la Golden ou la Chantecler, et tassez-les bien car elles rétrécissent.',
+    ingredients: [
+      { id: 'i3_1', name: 'Pommes (variété ferme type Golden)', quantity: 2, unit: 'kg' },
+      { id: 'i3_2', name: 'Pâte feuilletée pur beurre', quantity: 1, unit: 'rouleau' },
+      { id: 'i3_3', name: 'Sucre en poudre', quantity: 180, unit: 'g' },
+      { id: 'i3_4', name: 'Beurre demi-sel AOP', quantity: 90, unit: 'g' },
+      { id: 'i3_5', name: 'Gousse de vanille de Madagascar', quantity: 1, unit: 'pièce' },
+      { id: 'i3_6', name: 'Crème fraîche épaisse fermière', quantity: 150, unit: 'g' }
+    ],
+    instructions: [
+      'Épluchez les pommes, retirez le trognon et coupez-les en gros quartiers.',
+      'Dans un moule à tatin (ou une poêle allant au four de 26 cm), faites fondre le sucre avec 2 cuillères d’eau à feu moyen sans remuer jusqu’à l’obtention d’un caramel doré.',
+      'Hors du feu, incorporez le beurre demi-sel en dés et les graines de la gousse de vanille grattée pour arrêter la cuisson du caramel.',
+      'Disposez les quartiers de pommes bien serrés verticalement sur la tranche dans le caramel.',
+      'Faites précuire les pommes sur feu doux pendant 10 à 15 minutes pour qu’elles s’imbibent du caramel.',
+      'Préchauffez votre four à 180°C (th. 6).',
+      'Déroulez la pâte feuilletée sur les pommes tiédies en rentrant bien les bords à l’intérieur du moule.',
+      'Piquez légèrement la pâte avec une fourchette pour laisser la vapeur s’échapper.',
+      'Enfournez 30 à 35 minutes jusqu’à ce que la pâte soit bien dorée et soufflée.',
+      'Laissez tiédir 10 minutes avant de démouler d’un geste vif sur un grand plat de service rond. Servez tiède avec une cuillère de crème fraîche.'
+    ]
+  },
+  {
+    id: 'rec_4',
+    title: 'Risotto Crémeux aux Cèpes & Parmesan',
+    category: 'vegetarien',
+    description: 'Riz Carnaroli cuit patiemment au bouillon végétal et vin blanc, champignons poêlés à l’ail et généreux copeaux de Parmigiano Reggiano.',
+    prepTime: 15,
+    cookTime: 25,
+    servings: 4,
+    difficulty: 'Facile',
+    calories: 460,
+    macros: {
+      calories: 460,
+      proteins: 14,
+      carbs: 64,
+      fats: 16
+    },
+    image: '/src/assets/images/recipe_mushroom_risotto_1794085563411.jpg',
+    userRating: 4,
+    isFavorite: false,
+    isCustom: false,
+    createdAt: '2026-02-18T18:00:00.000Z',
+    chefTip: 'La clé d’un risotto réussi est la mantecatura finale : éteignez le feu avant d’incorporer le beurre très froid et le parmesan, puis couvrez 2 minutes avant d’émulsionner.',
+    ingredients: [
+      { id: 'i4_1', name: 'Riz à risotto (Carnaroli ou Arborio)', quantity: 320, unit: 'g' },
+      { id: 'i4_2', name: 'Champignons frais et cèpes séchés', quantity: 400, unit: 'g' },
+      { id: 'i4_3', name: 'Bouillon de légumes chaud', quantity: 1.2, unit: 'L' },
+      { id: 'i4_4', name: 'Vin blanc sec', quantity: 15, unit: 'cl' },
+      { id: 'i4_5', name: 'Échalotes émincées', quantity: 2, unit: 'pièces' },
+      { id: 'i4_6', name: 'Parmesan fraîchement râpé', quantity: 80, unit: 'g' },
+      { id: 'i4_7', name: 'Beurre très froid coupé en dés', quantity: 50, unit: 'g' },
+      { id: 'i4_8', name: 'Huile d’olive', quantity: 2, unit: 'c. à soupe' },
+      { id: 'i4_9', name: 'Thym frais et poivre noir', quantity: null, unit: 'au goût' }
+    ],
+    instructions: [
+      'Réhydratez les cèpes séchés dans un bol d’eau tiède si vous en utilisez. Gardez le bouillon filtré.',
+      'Dans une grande sauteuse, faites suer les échalotes émincées dans 1 cuillère d’huile d’olive à feu doux sans coloration.',
+      'Ajoutez le riz et nacrez-le pendant 2 minutes en remuant jusqu’à ce que les grains deviennent translucides.',
+      'Déglacez avec le vin blanc sec et laissez évaporer complètement.',
+      'Versez le bouillon chaud louche après louche en attendant chaque fois que le liquide soit absorbé avant d’en reverser (comptez 18 minutes).',
+      'Pendant ce temps, poêlez vivement les champignons frais dans une noisette de beurre avec le thym. Assaisonnez.',
+      'Quand le riz est al dente, éteignez le feu (mantecatura). Ajoutez le beurre très froid et le parmesan râpé. Mélangez vivement pour créer une texture liée.',
+      'Incorporez les trois quarts des champignons poêlés.',
+      'Servez aussitôt dans des assiettes creuses chaudes, garni du reste de champignons et de copeaux de parmesan.'
+    ]
+  },
+  {
+    id: 'rec_5',
+    title: 'Velouté de Potimarron Rôti aux Graines Croquantes',
+    category: 'entrees',
+    description: 'Une soupe soyeuse au doux parfum de châtaigne réconfortante, relevée d’une pointe de crème d’Isigny et graines de courge torréfiées.',
+    prepTime: 15,
+    cookTime: 30,
+    servings: 4,
+    difficulty: 'Facile',
+    calories: 220,
+    macros: {
+      calories: 220,
+      proteins: 6,
+      carbs: 24,
+      fats: 11
+    },
+    image: '/src/assets/images/recipe_pumpkin_soup_1794085613241.jpg',
+    userRating: 5,
+    isFavorite: false,
+    isCustom: false,
+    createdAt: '2026-02-22T19:30:00.000Z',
+    chefTip: 'Inutile d’éplucher le potimarron : sa peau fine et tendre se mixe parfaitement tout en apportant une superbe couleur orangée intense et des nutriments.',
+    ingredients: [
+      { id: 'i5_1', name: 'Potimarron bio', quantity: 1, unit: 'pièce (env. 1 kg)' },
+      { id: 'i5_2', name: 'Oignon jaune', quantity: 1, unit: 'pièce' },
+      { id: 'i5_3', name: 'Gousses d’ail', quantity: 2, unit: 'pièces' },
+      { id: 'i5_4', name: 'Bouillon de volaille ou légumes', quantity: 75, unit: 'cl' },
+      { id: 'i5_5', name: 'Crème fraîche épaisse ou crème de coco', quantity: 10, unit: 'cl' },
+      { id: 'i5_6', name: 'Graines de courge torréfiées', quantity: 3, unit: 'c. à soupe' },
+      { id: 'i5_7', name: 'Noix de muscade râpée', quantity: 1, unit: 'pincée' },
+      { id: 'i5_8', name: 'Huile d’olive', quantity: 2, unit: 'c. à soupe' },
+      { id: 'i5_9', name: 'Sel et poivre du moulin', quantity: null, unit: 'au goût' }
+    ],
+    instructions: [
+      'Brossez le potimarron sous l’eau tiède, coupez-le en deux, ôtez les pépins puis détaillez la chair avec sa peau en gros cubes.',
+      'Dans une cocotte, faites chauffer l’huile d’olive et faites revenir l’oignon émincé et l’ail haché 3 minutes.',
+      'Ajoutez les cubes de potimarron et faites-les suer 5 minutes pour développer les arômes de noisette.',
+      'Mouillez avec le bouillon chaud jusqu’à hauteur, couvrez et laissez mijoter à petits frémissements pendant 25 minutes.',
+      'Vérifiez la cuisson avec la pointe d’un couteau : la chair doit être très tendre.',
+      'Mixez longuement au plongeur ou au blender jusqu’à obtenir une texture veloutée ultra lisse.',
+      'Incorporez la crème, la muscade râpée, salez et poivrez à convenance.',
+      'Dressez dans de jolis bols, décorez d’un filet de crème, d’un tour de moulin à poivre et parsemez généreusement de graines de courge croquantes.'
+    ]
+  },
+  {
+    id: 'rec_6',
+    title: 'Shakshuka aux Œufs Coulants & Feta',
+    category: 'rapide',
+    description: 'Poivrons rouges fondants, sauce tomate mijotée aux épices douces (cumin, paprika), œufs bio pochés à cœur et feta émiettée.',
+    prepTime: 10,
+    cookTime: 15,
+    servings: 3,
+    difficulty: 'Facile',
+    calories: 340,
+    macros: {
+      calories: 340,
+      proteins: 18,
+      carbs: 16,
+      fats: 22
+    },
+    image: '',
+    userRating: 5,
+    isFavorite: true,
+    isCustom: false,
+    createdAt: '2026-03-01T09:30:00.000Z',
+    chefTip: 'Pour des blancs bien cuits et des jaunes coulants, couvrez la poêle dès que vous cassez les œufs et comptez très précisément 4 minutes de cuisson.',
+    ingredients: [
+      { id: 'i6_1', name: 'Œufs frais bio', quantity: 4, unit: 'pièces' },
+      { id: 'i6_2', name: 'Poivrons rouges', quantity: 2, unit: 'pièces' },
+      { id: 'i6_3', name: 'Tomates concassées en boîte', quantity: 400, unit: 'g' },
+      { id: 'i6_4', name: 'Feta grecque AOP', quantity: 100, unit: 'g' },
+      { id: 'i6_5', name: 'Oignon rouge', quantity: 1, unit: 'pièce' },
+      { id: 'i6_6', name: 'Gousses d’ail', quantity: 2, unit: 'pièces' },
+      { id: 'i6_7', name: 'Cumin moulu', quantity: 1, unit: 'c. à café' },
+      { id: 'i6_8', name: 'Paprika doux fumé', quantity: 1, unit: 'c. à café' },
+      { id: 'i6_9', name: 'Coriandre fraîche', quantity: 1, unit: 'poignée' },
+      { id: 'i6_10', name: 'Huile d’olive', quantity: 2, unit: 'c. à soupe' }
+    ],
+    instructions: [
+      'Émincez l’oignon rouge et coupez les poivrons épépinés en fines lanières.',
+      'Dans une large poêle en fonte, faites revenir les légumes dans l’huile d’olive chaude pendant 8 minutes.',
+      'Ajoutez l’ail pressé, le cumin et le paprika. Remuez 1 minute pour torréfier les épices.',
+      'Versez les tomates concassées, salez, poivrez et laissez mijoter à découvert 6 minutes pour épaissir la sauce.',
+      'Creusez 4 petits puits avec une cuillère en bois dans la sauce.',
+      'Cassez délicatement un œuf dans chaque puits.',
+      'Couvrez la poêle et laissez cuire 4 minutes à feu moyen doux pour figer les blancs tout en conservant le jaune liquide.',
+      'Retirez du feu, parsemez de feta émiettée, de feuilles de coriandre et d’un tour de moulin à poivre. Servez avec du bon pain chaud.'
+    ]
+  },
+  {
+    id: 'rec_7',
+    title: 'Moelleux Cœur Coulant Chocolat Noir 70%',
+    category: 'desserts',
+    description: 'Le dessert gourmand par excellence : une croûte délicate qui libère un torrent de chocolat chaud intensément cacaoté.',
+    prepTime: 12,
+    cookTime: 9,
+    servings: 4,
+    difficulty: 'Facile',
+    calories: 420,
+    macros: {
+      calories: 420,
+      proteins: 7,
+      carbs: 38,
+      fats: 26
+    },
+    image: '',
+    userRating: 5,
+    isFavorite: false,
+    isCustom: false,
+    createdAt: '2026-03-05T15:00:00.000Z',
+    chefTip: 'La cuisson est capitale à la minute près : retirez du four quand les bords sont pris mais que le centre tremble encore légèrement.',
+    ingredients: [
+      { id: 'i7_1', name: 'Chocolat noir pâtissier 70%', quantity: 160, unit: 'g' },
+      { id: 'i7_2', name: 'Beurre doux', quantity: 100, unit: 'g' },
+      { id: 'i7_3', name: 'Œufs entiers', quantity: 3, unit: 'pièces' },
+      { id: 'i7_4', name: 'Sucre de canne', quantity: 70, unit: 'g' },
+      { id: 'i7_5', name: 'Farine de blé', quantity: 45, unit: 'g' },
+      { id: 'i7_6', name: 'Fleur de sel', quantity: 1, unit: 'pincée' }
+    ],
+    instructions: [
+      'Préchauffez votre four à 200°C (chaleur tournante). Beurrez et farinez 4 ramequins individuels.',
+      'Faites fondre le chocolat haché et le beurre coupé en morceaux au bain-marie ou à feu très doux.',
+      'Dans un cul-de-poule, fouettez vivement les œufs avec le sucre jusqu’à ce que le mélange blanchisse légèrement.',
+      'Incorporez le mélange chocolat/beurre fondu et tiédi, puis la pincée de fleur de sel.',
+      'Tamisez la farine au-dessus de l’appareil et mélangez délicatement avec une spatule sans trop travailler la pâte.',
+      'Répartissez la préparation dans les ramequins.',
+      'Enfournez exactement 9 minutes à 200°C.',
+      'Laissez reposer 2 minutes hors du four avant de démouler ou de servir directement dans les ramequins avec une boule de glace vanille.'
+    ]
+  },
+  {
+    id: 'rec_8',
+    title: 'Rillettes de Thon & Fromage Frais à la Ciboulette',
+    category: 'aperitifs',
+    description: 'Un dip apéritif express, frais et gourmand préparé en 5 minutes avec du thon blanc, échalote, jus de citron et ciboulette fraîche du jardin.',
+    prepTime: 8,
+    cookTime: 0,
+    servings: 6,
+    difficulty: 'Facile',
+    calories: 140,
+    macros: {
+      calories: 140,
+      proteins: 18,
+      carbs: 2,
+      fats: 6
+    },
+    image: '',
+    userRating: 4,
+    isFavorite: false,
+    isCustom: false,
+    createdAt: '2026-03-08T18:00:00.000Z',
+    chefTip: 'Pour une texture aérée et agréable, écrasez à la fourchette sans passer au mixeur pour garder des petits morceaux gourmands.',
+    ingredients: [
+      { id: 'i8_1', name: 'Thon blanc au naturel égoutté', quantity: 280, unit: 'g' },
+      { id: 'i8_2', name: 'Fromage frais type St Môret ou Philadelphia', quantity: 150, unit: 'g' },
+      { id: 'i8_3', name: 'Botte de ciboulette fraîche ciselée', quantity: 1, unit: 'botte' },
+      { id: 'i8_4', name: 'Échalote finement hachée', quantity: 1, unit: 'pièce' },
+      { id: 'i8_5', name: 'Jus de citron jaune', quantity: 2, unit: 'c. à soupe' },
+      { id: 'i8_6', name: 'Moutarde de Dijon', quantity: 1, unit: 'c. à café' },
+      { id: 'i8_7', name: 'Piment d’Espelette', quantity: 1, unit: 'pincée' },
+      { id: 'i8_8', name: 'Sel et poivre', quantity: null, unit: 'au goût' }
+    ],
+    instructions: [
+      'Égouttez soigneusement le thon puis émiettez-le à la fourchette dans un bol.',
+      'Ajoutez le fromage frais, l’échalote émincée, la moutarde et le jus de citron.',
+      'Mélangez intimement jusqu’à obtenir une consistance crémeuse mais rustique.',
+      'Incorporez les trois quarts de la ciboulette fraîche ciselée, salez, poivrez et saupoudrez de piment d’Espelette.',
+      'Placez au réfrigérateur 30 minutes avant de servir.',
+      'Dégustez avec des tranches de pain de campagne grillées ou des bâtonnets de carottes et concombres croquants.'
+    ]
+  }
+];

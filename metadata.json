@@ -1,0 +1,6 @@
+{
+  "name": "Ciboulette - Carnet de Cuisine",
+  "description": "Application de cuisine locale et hors-ligne : recettes par catégories, recherche par ingrédients, favoris, notation 5 étoiles et liste de courses automatique.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
