@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { Search, X, Sparkles, RotateCcw } from 'lucide-react';
 import { useRecipes } from '../context/RecipeContext';
 import { useLanguage } from '../context/LanguageContext';
 
-export const SearchBar: React.FC = () => {
+interface SearchBarProps {
+  /** input = the field alone (hero window); filters = chips + status; full = all of it (section head) */
+  variant?: 'input' | 'filters' | 'full';
+  /** Enter in the field (hero): switch to the recipes tab, which scrolls to its section */
+  onSubmit?: () => void;
+}
+
+export const SearchBar: React.FC<SearchBarProps> = ({ variant = 'full', onSubmit }) => {
   const {
     searchQuery,
     setSearchQuery,
@@ -21,37 +28,54 @@ export const SearchBar: React.FC = () => {
   };
 
   const hasActiveFilters = searchQuery.trim() !== '' || selectedIngredientFilter !== null;
+  const searchId = useId();
 
-  return (
-    <div className="space-y-3">
-      {/* Main search bar */}
-      <div className="relative flex items-center">
-        <div className="absolute left-3.5 text-stone-400 dark:text-stone-500 pointer-events-none">
-          <Search className="w-5 h-5" />
-        </div>
+  const inputBlock = (
+    <div className="flex flex-col gap-1.5">
+      {/* a label you can see names the field (field-label) */}
+      <label htmlFor={searchId} className="t-label muted">
+        {t('search.label')}
+      </label>
+      <div className="app-search">
+        <Search className="app-search__icon" aria-hidden="true" />
         <input
+          id={searchId}
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={t('search.placeholder')}
-          className="w-full pl-11 pr-10 py-3 rounded-xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-700/30 focus:border-emerald-700 transition-all shadow-xs"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              if (onSubmit) onSubmit();
+              else {
+                // smooth in JS like the nav (App.handleTabChange): CSS scroll-behavior would move the Tab key's focus scroll too
+                const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                document.getElementById('recettes')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+              }
+            }
+          }}
         />
         {searchQuery && (
           <button
             type="button"
+            className="app-search__clear"
             onClick={() => setSearchQuery('')}
-            className="absolute right-3 p-1 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 rounded-md transition-colors cursor-pointer"
+            aria-label={t('search.clear')}
             title={t('search.clear')}
           >
-            <X className="w-4 h-4" />
+            <X aria-hidden="true" />
           </button>
         )}
       </div>
+    </div>
+  );
 
-      {/* Ingredient Quick Filter Chips */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
-        <span className="text-stone-400 dark:text-stone-500 flex items-center gap-1 font-medium whitespace-nowrap shrink-0">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+  const filtersBlock = (
+    <>
+      {/* Ingredient quick-filter chips: they wrap, never scroll sideways (row-lines) */}
+      <div className="flex flex-wrap items-center gap-2 pb-1 text-xs">
+        <span className="flex items-center gap-1 font-medium whitespace-nowrap shrink-0 text-stone-600 dark:text-stone-400">
+          <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
           <span>{t('search.suggestedIngredients')}</span>
         </span>
 
@@ -61,14 +85,9 @@ export const SearchBar: React.FC = () => {
             <button
               key={ingredient}
               type="button"
-              onClick={() => {
-                setSelectedIngredientFilter(isSelected ? null : ingredient);
-              }}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all whitespace-nowrap shrink-0 border cursor-pointer ${
-                isSelected
-                  ? 'bg-emerald-800 text-white border-emerald-800 shadow-xs'
-                  : 'bg-stone-100/80 dark:bg-stone-800/80 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:bg-stone-200 dark:hover:bg-stone-700'
-              }`}
+              aria-pressed={isSelected}
+              onClick={() => setSelectedIngredientFilter(isSelected ? null : ingredient)}
+              className={`pill whitespace-nowrap shrink-0 ${isSelected ? 'is-on' : ''}`}
             >
               {ingredient}
             </button>
@@ -79,33 +98,38 @@ export const SearchBar: React.FC = () => {
           <button
             type="button"
             onClick={handleClear}
-            className="px-2.5 py-1.5 rounded-lg text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 flex items-center gap-1 text-xs whitespace-nowrap shrink-0 transition-colors cursor-pointer"
+            className="pill is-ghost whitespace-nowrap shrink-0"
           >
-            <RotateCcw className="w-3 h-3" />
+            <RotateCcw className="w-3 h-3" aria-hidden="true" />
             <span>{t('search.resetAll')}</span>
           </button>
         )}
       </div>
 
       {/* Filter status counter */}
-      <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 px-0.5">
-        <div className="flex items-center gap-1.5">
-          <span>
-            {filteredRecipes.length} {filteredRecipes.length > 1 ? t('nav.recipes').toLowerCase() : t('nav.recipes').toLowerCase().replace(/s$/, '')}
-          </span>
-          {hasActiveFilters && (
-            <>
-              <span aria-hidden="true">·</span>
-              <span className="text-emerald-700 dark:text-emerald-400 font-medium">
-                {t('search.activeFilter')} {selectedIngredientFilter || searchQuery}
-              </span>
-            </>
-          )}
-        </div>
-        <span className="text-stone-400 text-[11px] hidden sm:inline">
-          {t('app.privacy')}
+      <div className="flex items-center gap-1.5 text-xs text-stone-600 dark:text-stone-400 px-0.5">
+        <span>
+          {filteredRecipes.length} {filteredRecipes.length > 1 ? t('nav.recipes').toLowerCase() : t('nav.recipes').toLowerCase().replace(/s$/, '')}
         </span>
+        {hasActiveFilters && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span className="text-emerald-700 dark:text-emerald-400 font-medium">
+              {t('search.activeFilter')} {selectedIngredientFilter || searchQuery}
+            </span>
+          </>
+        )}
       </div>
+    </>
+  );
+
+  if (variant === 'input') return inputBlock;
+  if (variant === 'filters') return <div className="space-y-3">{filtersBlock}</div>;
+
+  return (
+    <div className="space-y-3">
+      {inputBlock}
+      {filtersBlock}
     </div>
   );
 };

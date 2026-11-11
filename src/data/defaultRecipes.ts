@@ -17,7 +17,7 @@ export const INITIAL_RECIPES: Recipe[] = [
       carbs: 18,
       fats: 28
     },
-    image: '/src/assets/images/recipe_boeuf_bourguignon_1794085562307.jpg',
+    image: 'images/recipe_boeuf_bourguignon_1794085562307.jpg',
     userRating: 5,
     isFavorite: true,
     isCustom: false,
@@ -65,7 +65,7 @@ export const INITIAL_RECIPES: Recipe[] = [
       carbs: 6,
       fats: 26
     },
-    image: '/src/assets/images/recipe_salmon_crispy_1794085601448.jpg',
+    image: 'images/recipe_salmon_crispy_1794085601448.jpg',
     userRating: 4,
     isFavorite: false,
     isCustom: false,
@@ -106,7 +106,7 @@ export const INITIAL_RECIPES: Recipe[] = [
       carbs: 52,
       fats: 18
     },
-    image: '/src/assets/images/recipe_tarte_tatin_1794085563417.jpg',
+    image: 'images/recipe_tarte_tatin_1794085563417.jpg',
     userRating: 5,
     isFavorite: true,
     isCustom: false,
@@ -149,7 +149,7 @@ export const INITIAL_RECIPES: Recipe[] = [
       carbs: 64,
       fats: 16
     },
-    image: '/src/assets/images/recipe_mushroom_risotto_1794085563411.jpg',
+    image: 'images/recipe_mushroom_risotto_1794085563411.jpg',
     userRating: 4,
     isFavorite: false,
     isCustom: false,
@@ -194,7 +194,7 @@ export const INITIAL_RECIPES: Recipe[] = [
       carbs: 24,
       fats: 11
     },
-    image: '/src/assets/images/recipe_pumpkin_soup_1794085613241.jpg',
+    image: 'images/recipe_pumpkin_soup_1794085613241.jpg',
     userRating: 5,
     isFavorite: false,
     isCustom: false,

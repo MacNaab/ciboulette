@@ -45,7 +45,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
             onMouseLeave={() => interactive && setHoverRating(null)}
             className={`${
               interactive
-                ? 'cursor-pointer hover:scale-115 transition-transform p-0.5 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500'
+                ? 'cursor-pointer hover:scale-115 transition-transform p-0.5 rounded-sm focus-visible:ring-1 focus-visible:ring-amber-500'
                 : 'cursor-default pointer-events-none'
             }`}
             aria-label={interactive ? `Noter ${starValue} étoiles sur ${maxStars}` : undefined}

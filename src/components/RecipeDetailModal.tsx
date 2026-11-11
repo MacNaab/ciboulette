@@ -22,6 +22,7 @@ import {
 import { Recipe } from '../types/recipe';
 import { useRecipes } from '../context/RecipeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useCookingTimer } from '../services/cookingTimer';
 import { StarRating } from './StarRating';
 
 interface RecipeDetailModalProps {
@@ -53,39 +54,22 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  // Embedded kitchen cooking timer
-  const [timerSeconds, setTimerSeconds] = useState<number>(0);
-  const [timerRunning, setTimerRunning] = useState<boolean>(false);
+  // Embedded kitchen cooking timer — global service, so it keeps counting when
+  // the modal closes, the page reloads, or the app runs in the background.
+  const timer = useCookingTimer();
+  const timerForThisRecipe = Boolean(recipe && timer.timer?.recipeId === recipe.id);
+  const defaultTimerSeconds = recipe && recipe.cookTime > 0 ? recipe.cookTime * 60 : 15 * 60;
+  const timerSeconds = timerForThisRecipe ? timer.remainingSeconds : defaultTimerSeconds;
+  const timerRunning = timerForThisRecipe && timer.running;
 
   useEffect(() => {
     if (recipe) {
       setServings(recipe.servings);
       setCompletedSteps([]);
-      setTimerRunning(false);
-      setTimerSeconds(recipe.cookTime > 0 ? recipe.cookTime * 60 : 15 * 60);
       setConfirmDelete(false);
       setImgError(false);
     }
   }, [recipe]);
-
-  // Timer interval
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (timerRunning && timerSeconds > 0) {
-      interval = setInterval(() => {
-        setTimerSeconds((prev) => {
-          if (prev <= 1) {
-            setTimerRunning(false);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [timerRunning, timerSeconds]);
 
   if (!recipe) return null;
 
@@ -127,6 +111,21 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
     const mins = Math.floor(totalSec / 60);
     const secs = totalSec % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Start / pause / resume the global timer (permission asked on this click).
+  const handleToggleTimer = () => {
+    if (!recipe) return;
+    if (timerForThisRecipe) {
+      if (timer.running) timer.pause();
+      else timer.resume();
+    } else {
+      timer.start(recipe.id, recipe.title, defaultTimerSeconds);
+    }
+  };
+
+  const handleResetTimer = () => {
+    if (timerForThisRecipe) timer.cancel();
   };
 
   const isIngredientInCart = (ingName: string) => {
@@ -188,7 +187,7 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
                 alt={recipe.title}
                 onError={() => setImgError(true)}
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover"
+                className="detail-hero__photo"
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-stone-800 to-stone-950 text-stone-200 p-6">
@@ -198,10 +197,10 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
                 </span>
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+            <div className="detail-hero__scrim" aria-hidden="true" />
 
             {/* Overlay Info Header */}
-            <div className="absolute bottom-6 left-6 right-6 text-white">
+            <div className="detail-hero__cap absolute bottom-6 left-6 right-6 text-white">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2 text-xs font-medium text-stone-300">
                   <span className="capitalize">{getCategoryText(recipe.category)}</span>
@@ -304,7 +303,7 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
           </div>
 
           {/* Main 2-Column Content Grid */}
-          <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="p-6 sm:p-8 grid modal-grid modal-grid--detail grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* Left Column: Ingredients & Shopping List (5 cols) */}
             <div className="lg:col-span-5 space-y-6">
@@ -349,7 +348,7 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-4 gap-2 text-center">
+                  <div className="grid modal-grid modal-grid--macros grid-cols-4 gap-2 text-center">
                     <div className="bg-white dark:bg-stone-900 p-2.5 rounded-xl border border-stone-200/80 dark:border-stone-800 shadow-2xs">
                       <span className="text-[10px] text-stone-400 block mb-0.5">{t('detail.caloriesUnit')}</span>
                       <span className="font-mono text-sm font-bold text-amber-700 dark:text-amber-400 tabular-nums">
@@ -517,29 +516,26 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
 
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setTimerRunning((prev) => !prev)}
+                    onClick={handleToggleTimer}
                     className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
                     {timerRunning ? (
                       <>
                         <Pause className="w-3.5 h-3.5" />
-                        <span>Pause</span>
+                        <span>{t('timer.pause')}</span>
                       </>
                     ) : (
                       <>
                         <Play className="w-3.5 h-3.5" />
-                        <span>Play</span>
+                        <span>{t('timer.start')}</span>
                       </>
                     )}
                   </button>
 
                   <button
-                    onClick={() => {
-                      setTimerRunning(false);
-                      setTimerSeconds(recipe.cookTime > 0 ? recipe.cookTime * 60 : 15 * 60);
-                    }}
+                    onClick={handleResetTimer}
                     className="p-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 transition-colors cursor-pointer"
-                    title={t('search.resetAll')}
+                    title={t('timer.reset')}
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                   </button>

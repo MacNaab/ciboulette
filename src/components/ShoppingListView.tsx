@@ -174,16 +174,18 @@ export const ShoppingListView: React.FC<ShoppingListViewProps> = ({ onGoToRecipe
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      
-      {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-200 dark:border-stone-800">
+    <div className="sec-pane space-y-8">
+
+      {/* Header Bar — parted from the list by air alone (SR-3: no rules between parts) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
         <div>
-          <h1 className="font-serif-display text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2.5">
-            <ShoppingCart className="w-7 h-7 text-emerald-800 dark:text-emerald-400" />
+          {/* on the inverse band the heading takes the ground's own ink (both grades);
+              the icon sits inline so the words start on the container's left line */}
+          <h2 id="courses-h" className="font-serif-display text-2xl sm:text-3xl font-bold">
+            <ShoppingCart className="w-7 h-7 mr-2.5 inline-block align-middle text-[var(--accent)]" aria-hidden="true" />
             <span>{t('shop.title')}</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
+          </h2>
+          <p className="text-xs sm:text-sm muted mt-1">
             {pendingCount} {t('detail.ingredients').toLowerCase()}
             {completedCount > 0 && ` · ${t('shop.checkedProgress', { checked: completedCount, total: shoppingList.length })}`}
           </p>
@@ -336,47 +338,47 @@ export const ShoppingListView: React.FC<ShoppingListViewProps> = ({ onGoToRecipe
         </div>
       )}
 
-      {/* Quick Add Manual Item Form */}
+      {/* Quick Add Manual Item Form — every field under its own visible label.
+          Kept to one column's width so the row reads as a form, not a bar across the band */}
       <form
         onSubmit={handleAddManual}
-        className="bg-white dark:bg-stone-900 rounded-2xl p-4 border border-stone-200/80 dark:border-stone-800 shadow-2xs flex flex-wrap items-center gap-2.5"
+        className="max-w-xl bg-white dark:bg-stone-900 rounded-2xl p-4 border border-stone-200/80 dark:border-stone-800 shadow-2xs flex flex-wrap items-end gap-2.5"
       >
-        <div className="flex-1 min-w-[160px]">
+        <label className="flex flex-col gap-1 flex-1 min-w-[160px]">
+          <span className="t-label muted">{t('shop.fieldName')}</span>
           <input
             type="text"
             value={newItemName}
             onChange={(e) => setNewItemName(e.target.value)}
             placeholder={t('shop.manualPlaceholder')}
-            className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
+            className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:ring-2 focus:ring-emerald-700/30"
           />
-        </div>
+        </label>
 
-        <div className="w-20">
+        <label className="flex flex-col gap-1 w-20">
+          <span className="t-label muted">{t('shop.fieldQty')}</span>
           <input
             type="text"
             value={newItemQty}
             onChange={(e) => setNewItemQty(e.target.value)}
             placeholder={t('form.ingQtyPlaceholder')}
-            className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-700/30 font-mono"
+            className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:ring-2 focus:ring-emerald-700/30 font-mono"
           />
-        </div>
+        </label>
 
-        <div className="w-24">
+        <label className="flex flex-col gap-1 w-24">
+          <span className="t-label muted">{t('shop.fieldUnit')}</span>
           <input
             type="text"
             value={newItemUnit}
             onChange={(e) => setNewItemUnit(e.target.value)}
             placeholder={t('form.ingUnitPlaceholder')}
-            className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
+            className="w-full px-3 py-2 text-xs sm:text-sm rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:ring-2 focus:ring-emerald-700/30"
           />
-        </div>
+        </label>
 
-        <button
-          type="submit"
-          disabled={!newItemName.trim()}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-emerald-800 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-2xs cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
+        <button type="submit" disabled={!newItemName.trim()} className="btn btn--primary">
+          <Plus aria-hidden="true" />
           <span>{t('shop.manualAdd')}</span>
         </button>
       </form>
@@ -426,23 +428,20 @@ export const ShoppingListView: React.FC<ShoppingListViewProps> = ({ onGoToRecipe
 
       {/* Main List Rendering */}
       {shoppingList.length === 0 ? (
-        <div className="bg-white dark:bg-stone-900 rounded-3xl p-12 text-center border border-stone-200/80 dark:border-stone-800 space-y-4">
+        <div className="shop-empty max-w-xl mx-auto bg-white dark:bg-stone-900 rounded-3xl p-6 sm:p-12 text-center border border-stone-200/80 dark:border-stone-800 space-y-4">
           <div className="w-16 h-16 mx-auto rounded-2xl bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-400">
-            <ShoppingCart className="w-8 h-8" />
+            <ShoppingCart className="w-8 h-8" aria-hidden="true" />
           </div>
           <div className="max-w-md mx-auto">
             <h3 className="font-serif-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-1">
               {t('shop.emptyTitle')}
             </h3>
-            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400">
+            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-300">
               {t('shop.emptyDesc')}
             </p>
           </div>
-          <button
-            onClick={onGoToRecipes}
-            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white transition-colors cursor-pointer"
-          >
-            <ChefHat className="w-4 h-4" />
+          <button onClick={onGoToRecipes} className="btn btn--primary">
+            <ChefHat aria-hidden="true" />
             <span>{t('shop.goToRecipes')}</span>
           </button>
         </div>

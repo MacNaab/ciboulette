@@ -77,6 +77,10 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed.map((r: any) => ({
             ...r,
+            // legacy dev-only image paths (/src/assets/...) 404 in the built site: migrate to public/
+            image: typeof r.image === 'string' && r.image.startsWith('/src/assets/images/')
+              ? r.image.replace('/src/assets/images/', 'images/')
+              : r.image,
             userRating: r.userRating !== undefined ? r.userRating : (r.rating ? Math.round(r.rating) : undefined)
           }));
         }
@@ -122,6 +126,9 @@ export const RecipeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       document.documentElement.classList.remove('dark');
       localStorage.setItem(STORAGE_KEYS.DARK_MODE, 'light');
     }
+    // the kit reads <html data-tone> once at load (system.js tone()): keep it in step
+    // with the theme so a dark footer stays on its own ground after a toggle
+    document.documentElement.dataset.tone = isDarkMode ? 'dark' : 'light';
   }, [isDarkMode]);
 
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);

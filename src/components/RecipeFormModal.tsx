@@ -665,7 +665,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                     }}
                     readOnly={showOriginal}
                     placeholder={t('form.smartPlaceholder')}
-                    className="w-full p-4 text-xs sm:text-sm rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100 font-mono leading-relaxed focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
+                    className="w-full p-4 text-xs sm:text-sm rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100 font-mono leading-relaxed focus:ring-2 focus:ring-emerald-700/30"
                   />
                   {isTranslating && (
                     <div className="absolute inset-0 bg-white/70 dark:bg-stone-900/70 backdrop-blur-2xs rounded-2xl flex flex-col items-center justify-center gap-2 text-stone-700 dark:text-stone-200">
@@ -725,7 +725,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
             <form onSubmit={handleSubmit} className="space-y-6">
               
               {/* Title & Category */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid modal-grid modal-grid--3 grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2 space-y-1.5">
                   <label className="font-medium text-stone-700 dark:text-stone-300">
                     {t('form.title')}
@@ -736,7 +736,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder={t('form.titlePlaceholder')}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-emerald-700/30"
                   />
                 </div>
 
@@ -747,7 +747,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as RecipeCategory)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-700/30 cursor-pointer"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-emerald-700/30 cursor-pointer"
                   >
                     <option value="plats">{getCategoryText('plats')}</option>
                     <option value="entrees">{getCategoryText('entrees')}</option>
@@ -760,7 +760,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
               </div>
 
               {/* Photo & Source Link Section */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid modal-grid modal-grid--2 grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="font-medium text-stone-700 dark:text-stone-300 flex items-center gap-1.5">
                     <ImageIcon className="w-3.5 h-3.5 text-stone-400" />
@@ -771,7 +771,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                     value={image}
                     onChange={(e) => setImage(e.target.value)}
                     placeholder={t('form.imageUrlPlaceholder')}
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
+                    className="w-full px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-xs focus:ring-2 focus:ring-emerald-700/30"
                   />
                 </div>
 
@@ -785,7 +785,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                     value={sourceUrl}
                     onChange={(e) => setSourceUrl(e.target.value)}
                     placeholder={t('form.sourceUrlPlaceholder')}
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
+                    className="w-full px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-xs focus:ring-2 focus:ring-emerald-700/30"
                   />
                 </div>
               </div>
@@ -800,12 +800,12 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder={t('form.descriptionPlaceholder')}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-emerald-700/30"
                 />
               </div>
 
               {/* Prep time, Cook time, Servings & Difficulty */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid modal-grid modal-grid--24 grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs text-stone-600 dark:text-stone-300">
                     {t('form.prepTime')}
@@ -870,7 +870,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid modal-grid modal-grid--24 grid-cols-2 sm:grid-cols-4 gap-3">
                   <div className="space-y-1">
                     <label className="text-xs text-stone-600 dark:text-stone-300">{t('form.calories')}</label>
                     <input
@@ -949,7 +949,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                           value={ing.name}
                           onChange={(e) => handleIngredientChange(ing.id, 'name', e.target.value)}
                           placeholder={t('form.ingNamePlaceholder')}
-                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-emerald-700"
+                          className="w-full px-3 py-1.5 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-1 focus:ring-emerald-700"
                         />
                       </div>
 
@@ -959,7 +959,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                           value={ing.quantity}
                           onChange={(e) => handleIngredientChange(ing.id, 'quantity', e.target.value)}
                           placeholder={t('form.ingQtyPlaceholder')}
-                          className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-emerald-700 font-mono"
+                          className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-1 focus:ring-emerald-700 font-mono"
                         />
                       </div>
 
@@ -969,7 +969,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                           value={ing.unit}
                           onChange={(e) => handleIngredientChange(ing.id, 'unit', e.target.value)}
                           placeholder={t('form.ingUnitPlaceholder')}
-                          className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-emerald-700"
+                          className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-1 focus:ring-emerald-700"
                         />
                       </div>
 
@@ -1022,7 +1022,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                         onDragOver={(e) => handleDragOver(e, index)}
                         onDragEnd={handleDragEnd}
                         onDrop={(e) => handleDrop(e, index)}
-                        className={`group relative flex items-start gap-2.5 p-2 rounded-xl border transition-all duration-150 ${
+                        className={`relative flex items-start gap-2.5 p-2 rounded-xl border transition-all duration-150 ${
                           isDragging
                             ? 'opacity-40 border-dashed border-emerald-500 bg-emerald-50/20 dark:bg-emerald-950/20 scale-[0.99]'
                             : isDragOver
@@ -1049,7 +1049,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                           value={step.text}
                           onChange={(e) => handleStepChange(step.id, e.target.value)}
                           placeholder={`${t('detail.step', { step: index + 1 })}...`}
-                          className="flex-1 px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-emerald-700 resize-none"
+                          className="flex-1 px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50/60 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-1 focus:ring-emerald-700 resize-none"
                         />
 
                         {/* Quick Up/Down arrow buttons for accessibility */}
@@ -1100,7 +1100,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                   value={chefTip}
                   onChange={(e) => setChefTip(e.target.value)}
                   placeholder={t('form.chefTipPlaceholder')}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 focus:ring-2 focus:ring-emerald-700/30"
                 />
               </div>
 

@@ -1,0 +1,32 @@
+{
+  "name": "Ciboulette - Carnet de Cuisine & Liste de Courses",
+  "short_name": "Ciboulette",
+  "description": "Application de cuisine locale et hors-ligne : recettes par catégories, recherche par ingrédients, favoris, notation 5 étoiles et liste de courses automatique.",
+  "lang": "fr",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#e2e2e2",
+  "theme_color": "#e2e2e2",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

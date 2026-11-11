@@ -1,21 +1,76 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr" data-type="software" data-radius="round" data-buttons="arrow" data-motion>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ciboulette - Carnet de Cuisine & Liste de Courses</title>
-    <meta name="description" content="Application de cuisine locale et hors-ligne : recettes par catégories, recherche par ingrédients, favoris, notation 5 étoiles et liste de courses automatique." />
-    <meta property="og:title" content="Ciboulette - Carnet de Cuisine & Liste de Courses" />
-    <meta property="og:description" content="Application de cuisine locale et hors-ligne : recettes par catégories, recherche par ingrédients, favoris, notation 5 étoiles et liste de courses automatique." />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Ciboulette : recettes et liste de courses hors-ligne</title>
+    <meta name="description" content="Le carnet de recettes qui fonctionne sans réseau : cherchez par ingrédient, gardez vos favoris et votre liste de courses se remplit toute seule." />
     <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ciboulette : recettes et liste de courses hors-ligne" />
+    <meta property="og:description" content="Recettes par catégories, recherche par ingrédients, favoris et liste de courses automatique — 100 % hors-ligne." />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#e2e2e2" />
+    <meta name="site-kind" content="software" />
+    <meta name="page-type" content="software" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Ciboulette" />
+
+    <!-- type: Instrument Sans + DM Mono (dealt pairing, start.mjs css) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <!-- kit styles, in the kit's order (public/assets, copied from the skill) -->
+    <link rel="stylesheet" href="/assets/system.css" />
+    <link rel="stylesheet" href="/assets/ui/cards.css" />
+    <link rel="stylesheet" href="/assets/motion/motion.css" />
+    <link rel="stylesheet" href="/assets/layout/layout.css" />
+    <link rel="stylesheet" href="/assets/ui/base.css" />
+    <!-- palette and type as start.mjs prints them, after the links (layout.css resets --ly-scale) -->
+    <style>
+      :root {
+        --p-bg: #e2e2e2; --p-surface: #d6d6d6; --p-ink: #7d0c14; --p-muted: #7a4a4e;
+        --p-accent: #7d0c14; --p-accent-ink: #e2e2e2; --p-action: #7d0c14; --p-action-ink: #e2e2e2;
+        --p-inv-bg: #7d0c14; --p-inv-surface: #862323; --p-inv-ink: #e2e2e2; --p-inv-muted: #d0b3af;
+        --p-inv-accent: #e2e2e2; --p-inv-accent-ink: #7d0c14; --p-inv-action: #e2e2e2; --p-inv-action-ink: #7d0c14;
+        --font-display: "Instrument Sans", system-ui, sans-serif;
+        --font-text: "Instrument Sans", system-ui, sans-serif;
+        --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+        --display-weight: 500;
+        --display-tracking: -0.028em;
+        --display-tracking-xl: -0.036em;
+        --display-stretch: 96%;
+        --ly-scale: 1.04;
+        /* the lit ground (hero window frame, footer--statement slab) in the dealt palette */
+        --ground-bg: #d6d6d6; --ground-surface: #d6d6d6; --ground-ink: #7d0c14;
+        --ground-muted: #7a4a4e; --ground-accent: #7d0c14;
+      }
+      /* the same palette graded for the dark page (class .dark on <html>, toggled in the app) */
+      .dark {
+        --p-bg: #171112; --p-surface: #241a1b; --p-ink: #ece4e4; --p-muted: #bda6a8;
+        --p-accent: #d76b70; --p-accent-ink: #171112; --p-action: #d76b70; --p-action-ink: #171112;
+        --p-inv-bg: #ece4e4; --p-inv-surface: #f2eded; --p-inv-ink: #171112; --p-inv-muted: #6d585a;
+        --p-inv-accent: #7d0c14; --p-inv-accent-ink: #ece4e4; --p-inv-action: #7d0c14; --p-inv-action-ink: #ece4e4;
+        --ground-bg: #241a1b; --ground-surface: #241a1b; --ground-ink: #ece4e4;
+        --ground-muted: #bda6a8; --ground-accent: #d76b70;
+      }
+    </style>
+    <!-- the hero's entrance (motion.md): set before the first paint, after the stylesheets -->
+    <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
+    <!-- moments: the guard, then the preloads system.js pulls on mount -->
+    <script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+    <link rel="modulepreload" href="/assets/moments/moments.js" />
+    <link rel="modulepreload" href="/assets/moments/lib.js" />
+    <link rel="modulepreload" href="/assets/moments/iris-opens/moment.js" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

@@ -1,24 +1,683 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
-@layer base {
-  :root {
-    --font-serif: 'Playfair Display', Georgia, serif;
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  }
+/* ============================================================================
+   Palette « oxblood-grey » x type « instrument » (dealt: start.mjs css).
+   The kit wears the palette through --p-* (index.html). Tailwind utilities wear
+   it here: every legacy stone / emerald / rose / amber utility is remapped onto
+   one warm-grey + oxblood ramp, so no component needed a class rename.
+   ============================================================ */
+@theme {
+  --font-sans: "Instrument Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  body {
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  /* warm greys: 50-500 neutrals, 600-700 warm taupes, 800+ the ink's darks */
+  --color-stone-50: #f7f4f4;
+  --color-stone-100: #efebea;
+  --color-stone-200: #e2dcdc;
+  --color-stone-300: #cec4c4;
+  --color-stone-400: #ad9f9f;
+  --color-stone-500: #8b7c7d;
+  --color-stone-600: #7a4a4e;
+  --color-stone-700: #5f3a3d;
+  --color-stone-800: #3a2c2e;
+  --color-stone-900: #7d0c14; /* the page ink (light): every text-stone-900 reads oxblood */
+  --color-stone-950: #171112; /* the night */
 
-  h1, h2, h3, .font-serif-display {
-    font-family: var(--font-serif);
+  /* the page's paper and its night */
+  --color-white: #d6d6d6;
+  --color-black: #171112;
+
+  /* one oxblood ramp for every remaining utility colour (the single-accent deal):
+     success/warning/danger states stay inside the palette and keep their contrast */
+  --color-emerald-50: #f8eeee;
+  --color-emerald-100: #f1dede;
+  --color-emerald-200: #e6c3c4;
+  --color-emerald-300: #d69ea0;
+  --color-emerald-400: #c27477;
+  --color-emerald-500: #a94e53;
+  --color-emerald-600: #8f2f35;
+  --color-emerald-700: #7d0c14;
+  --color-emerald-800: #6a0a11;
+  --color-emerald-900: #4f080d;
+  --color-emerald-950: #330507;
+
+  --color-rose-50: #f8eeee;
+  --color-rose-100: #f1dede;
+  --color-rose-200: #e6c3c4;
+  --color-rose-300: #d69ea0;
+  --color-rose-400: #c27477;
+  --color-rose-500: #a94e53;
+  --color-rose-600: #8f2f35;
+  --color-rose-700: #7d0c14;
+  --color-rose-800: #6a0a11;
+  --color-rose-900: #4f080d;
+  --color-rose-950: #330507;
+
+  --color-amber-50: #f8eeee;
+  --color-amber-100: #f1dede;
+  --color-amber-200: #e6c3c4;
+  --color-amber-300: #d69ea0;
+  --color-amber-400: #c27477;
+  --color-amber-500: #a94e53;
+  --color-amber-600: #8f2f35;
+  --color-amber-700: #7d0c14;
+  --color-amber-800: #6a0a11;
+  --color-amber-900: #4f080d;
+  --color-amber-950: #330507;
+
+  --color-cyan-50: #f8eeee;
+  --color-cyan-100: #f1dede;
+  --color-cyan-200: #e6c3c4;
+  --color-cyan-300: #d69ea0;
+  --color-cyan-400: #c27477;
+  --color-cyan-500: #a94e53;
+  --color-cyan-600: #8f2f35;
+  --color-cyan-700: #7d0c14;
+  --color-cyan-800: #6a0a11;
+  --color-cyan-900: #4f080d;
+  --color-cyan-950: #330507;
+}
+
+/* The dark grade of the same ramp. Declared after @theme in the same stylesheet,
+   so on <html class="dark"> it wins over :root (equal specificity, later source). */
+.dark {
+  --color-stone-800: #332628;
+  --color-stone-900: #241a1b; /* surfaces the dark variants ask for */
+  --color-stone-950: #171112;
+}
+
+/* ============================================================================
+   Page rules. These load after the kit stylesheets (index.html), so on equal
+   specificity they refine it; the kit's own layers stay in charge of type,
+   rhythm and grounds.
+   ============================================================ */
+
+/* --- type: the app's display face (was Playfair; now the dealt pairing) --- */
+.font-serif-display {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: -0.02em;
+}
+
+/* the shell generates no box: the page is header, main and footer, one container (SR-6) */
+#root {
+  display: contents;
+}
+
+/* --- hero: the one hard fact under the lead (copy-fact) --- */
+.hero__fact {
+  font: 500 14px/1.5 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+/* --- nav: counts, language menu, icon buttons --- */
+.nav__count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--p-accent-ink);
+  font: 500 11px/1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.nav__word {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.nav__utils {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-btn);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.icon-btn:hover {
+  background: color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.icon-btn:active {
+  transform: translateY(1px);
+}
+@media (max-width: 639px) {
+  .icon-btn {
+    width: 44px;
+    height: 44px;
   }
 }
 
-/* Custom scrollbar styling for recipe drawer & ingredient lists */
+.lang {
+  position: relative;
+}
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  min-width: 168px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: 0 16px 40px -16px color-mix(in oklab, var(--ink) 45%, transparent);
+}
+.lang-menu button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--ink);
+  font: 500 14px/1 var(--font-text);
+  text-align: left;
+  cursor: pointer;
+}
+.lang-menu button:hover {
+  background: color-mix(in oklab, var(--ink) 7%, transparent);
+}
+.lang-menu button[aria-current="true"] {
+  color: var(--action);
+}
+
+/* --- filter pills (CategoryNav, SearchBar chips) --- */
+.pill.is-on,
+.pill[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+.pill.is-on .muted,
+.pill[aria-pressed="true"] .muted {
+  color: color-mix(in oklab, var(--bg) 72%, var(--ink));
+}
+.pill.is-ghost {
+  background: transparent;
+}
+
+/* --- selects (sort, minimum rating) --- */
+.app-select {
+  height: 44px;
+  padding: 0 var(--s-8) 0 var(--s-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-btn);
+  background: var(--bg);
+  color: var(--ink);
+  font: 500 14px/1 var(--font-text);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%237a4a4e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+.app-select:focus {
+  outline: none;
+  border-color: var(--action);
+  /* a solid ring: the focus indicator must stand 3:1 off the ground (focus-visible) */
+  box-shadow: 0 0 0 3px var(--action);
+}
+
+/* --- search (SearchBar, both variants) --- */
+.app-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(100%, 560px);
+}
+.app-search input {
+  width: 100%;
+  height: 44px;
+  padding: 0 var(--s-8) 0 42px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-btn);
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 var(--t-body)/1 var(--font-text);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.app-search input::placeholder {
+  color: var(--muted);
+}
+.app-search input:focus {
+  outline: none;
+  border-color: var(--action);
+  /* a solid ring: the focus indicator must stand 3:1 off the ground (focus-visible) */
+  box-shadow: 0 0 0 3px var(--action);
+}
+.app-search__icon {
+  position: absolute;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.app-search__clear {
+  position: absolute;
+  right: 8px;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.app-search__clear:hover {
+  color: var(--ink);
+}
+.app-search__hint {
+  position: absolute;
+  right: 12px;
+  font: 500 12px/1 var(--font-mono);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* --- the hero's product window (kit .ui-panel + these) --- */
+.app-win {
+  width: 100%;
+  overflow: hidden;
+  /* the window holds the page's own colours, so it stands off the lit frame behind it */
+  --fx-bg: var(--p-bg);
+  --fx-surface: var(--p-surface);
+  --fx-ink: var(--p-ink);
+  --fx-muted: var(--p-muted);
+  --fx-accent: var(--p-accent);
+  --fx-accent-ink: var(--p-accent-ink);
+}
+.app-win__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: 44px;
+  padding: 0 var(--s-4);
+  border-bottom: 1px solid var(--u-line);
+  background: var(--u-fill);
+  font-size: 13px;
+  color: var(--u-muted);
+  min-width: 0;
+}
+.app-win__bar b {
+  font-weight: 500;
+  color: var(--u-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.app-win__bar .ui-spacer {
+  flex: 1 1 auto;
+}
+.app-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--u-tint);
+  color: var(--u-accent-text);
+  font-size: 12px;
+  font-weight: 500;
+}
+.app-chip i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--u-accent);
+}
+.app-win__body {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-3);
+}
+/* the search inside the window is a still-but-live control: Enter jumps to the list */
+.app-win .app-search {
+  width: 100%;
+}
+.app-win .app-search input {
+  height: 40px;
+  background: var(--u-bg);
+  border-color: var(--u-line-2);
+  color: var(--u-ink);
+}
+.app-win .app-search input::placeholder {
+  color: var(--u-soft);
+}
+.app-win .app-search__icon {
+  color: var(--u-muted);
+}
+.app-win__tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--s-3);
+}
+.app-tile {
+  display: grid;
+  gap: 4px;
+  padding: var(--s-3);
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-r2);
+  background: var(--u-bg);
+  color: var(--u-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.app-tile:hover {
+  background: var(--u-fill-2);
+  border-color: var(--u-line-2);
+}
+.app-tile b {
+  font: 500 13px/1.3 var(--font-text);
+}
+.app-tile span {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--u-muted);
+}
+
+/* --- the recipe grid (kit .grid spans + the card's own photo) --- */
+.grid.recipe-grid {
+  align-content: start;
+}
+.grid.recipe-grid > .card {
+  grid-column: span 12;
+}
+@media (min-width: 640px) {
+  .grid.recipe-grid > .card {
+    grid-column: span 6;
+  }
+}
+@media (min-width: 1024px) {
+  .grid.recipe-grid > .card {
+    grid-column: span 4;
+  }
+}
+
+.recipe-card__media {
+  position: relative;
+  overflow: clip;
+  aspect-ratio: 4 / 3;
+  margin: calc(-1 * var(--c-pad)) calc(-1 * var(--c-pad)) var(--s-2);
+  border-radius: calc(var(--c-r) - 1px) calc(var(--c-r) - 1px) 0 0;
+  background: var(--surface);
+}
+.recipe-card__media img {
+  /* out of flow: the photograph fills the box, and the box's own aspect-ratio sets its
+     height (in flow, the image's intrinsic ratio won and the row grew as it loaded) */
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .recipe-card:hover .recipe-card__media img,
+  .recipe-card:focus-within .recipe-card__media img {
+    transform: scale(1.03);
+  }
+}
+
+/* --- sections: they grow with their content ---
+   The kit gives every section its screens as a fixed height; a live list is taller than
+   one screen, so these sections (marked data-screen="free": the checks read them live)
+   take their content's height instead. Nothing is clipped, no card row is cut by a frame,
+   and the pane never scrolls: its scrollbar (and scrollbar-gutter, which reserved 6px off
+   the grid) pushed every card off the 12 column lines. */
+main > section.section.sec-tall {
+  height: auto;
+  min-height: calc(var(--hm, var(--h, 1)) * 100vh);
+  min-height: calc(var(--hm, var(--h, 1)) * 100svh);
+}
+main > section.section.sec-tall > .wrap > .sec-pane {
+  overflow: visible;
+}
+.sec-pane > .grid.recipe-grid {
+  padding-bottom: var(--s-2);
+}
+
+/* --- the rhythm read: one gap at every change of ground (section-gaps) ---
+   The iris stage rises 17px over #recettes' top edge, so the hero's own foot sets the seam:
+   the hero gives back 24px above (it still clears the 72px header) and 24px below its words
+   (96 / 88), which lands the first seam on ~105px — beside the other two instead of half them. */
+@media (min-width: 1024px) {
+  main > .hero { --hgap: 24px; --hpadb: 88px; }
+  /* three cards a row in one screen: a 16:9 photograph and tighter rows carry the list's
+     second screen without pushing the section past two (T-height) */
+  .recipe-card__media { aspect-ratio: 16 / 9; }
+  .sec-pane > .grid.recipe-grid { row-gap: var(--s-2); padding-bottom: 0; }
+}
+
+/* --- the two quiet sections carry their own ground (no-visual) ---
+   A tint that turns at a corner is the section's own ground, not a flat fill: it changes
+   nothing the grounds read counts (its middle stays the ground's own colour), and it gives
+   #courses and #sauvegarde a picture's place in the section without a picture's noise.
+   #courses' turn sits at its foot — the head keeps the pure ground, so the lines over it
+   hold their contrast wherever the tint runs. */
+#courses {
+  background-image: linear-gradient(175deg,
+    var(--bg) 0%,
+    var(--bg) 45%,
+    color-mix(in oklab, var(--bg) 92%, var(--ink)) 100%);
+}
+#sauvegarde {
+  background-image:
+    radial-gradient(130% 90% at 88% -15%, color-mix(in oklab, var(--bg) 90%, var(--accent)) 0%, transparent 55%),
+    radial-gradient(100% 80% at -10% 115%, color-mix(in oklab, var(--bg) 93%, var(--surface)) 0%, transparent 60%);
+}
+
+/* the inverse band holds fixed-colour panels; inside them the action and the quiet line
+   are the page's own (a button or a caption on a white card reads as it does everywhere else) */
+#courses .sec-pane { --action: var(--p-action); --action-ink: var(--p-action-ink); }
+#courses .sec-pane form,
+#courses .shop-empty { --muted: var(--p-muted); }
+
+/* the empty list still fills its screen (empty-area / T-fill) */
+#courses .shop-empty { min-height: 408px; }
+
+/* --- backup: four cards, two a row over 768 (kit .grid spans and gap are unlayered) --- */
+#sauvegarde .backup-grid {
+  gap: var(--s-5);
+}
+@media (min-width: 768px) {
+  #sauvegarde .backup-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #sauvegarde .backup-grid > * { grid-column: auto; }
+}
+
+/* --- empty states (a card-shaped panel that still fills its screen) --- */
+.empty-state {
+  grid-column: 1 / -1;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--s-3);
+  min-height: clamp(300px, 42vh, 420px);
+  padding: var(--s-8) var(--s-6);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--c-r, var(--r-lg));
+  background: color-mix(in oklab, var(--ink) 3%, transparent);
+  color: var(--muted);
+  text-align: center;
+}
+.empty-state h3 {
+  font: 500 var(--t-h3)/1.25 var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.empty-state p {
+  max-width: 46ch;
+  font-size: var(--t-small);
+}
+
+/* --- footer close: the dealt word, sized so "Ciboulette" never clips --- */
+@media (max-width: 639px) {
+  .close__word {
+    font-size: min(17vw, 96px);
+  }
+}
+/* the word's line-height (.86) is shorter than its glyphs: clip across, never down,
+   so the accents and ascenders are not cut (cut-text) */
+.close__word {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+/* one action, one look: the close's primary wears the page's action colour on every
+   ground (the kit only does that for a light page; a dark page keeps the lit ground's
+   ink, which read as a second look for the same words — same-action) */
+.footer--statement {
+  --action: var(--p-action);
+  --action-ink: var(--p-action-ink);
+}
+.footer__col a:hover {
+  color: var(--action);
+}
+
+/* --- buttons: the dealt arrow + the app's lucide glyphs at one size --- */
+.btn > svg:not(.m-arrow) {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.icon-btn > svg {
+  width: 18px;
+  height: 18px;
+}
+/* an icon-button floating on a photograph: it carries its own surface */
+.icon-btn--float {
+  background: color-mix(in oklab, var(--p-bg) 82%, transparent);
+  backdrop-filter: blur(6px);
+}
+.icon-btn--float:hover {
+  background: color-mix(in oklab, var(--p-bg) 94%, var(--ink));
+}
+.icon-btn.is-added {
+  background: var(--action);
+  border-color: var(--action);
+  color: var(--action-ink);
+}
+
+/* the primary in the nav at 1024-1279: icon only, so the centre group never touches it */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .nav__actions .btn .btn-label {
+    display: none;
+  }
+  .nav__actions .btn::after {
+    content: none;
+    display: none;
+  }
+}
+
+/* a phone: the primary is icon only too, so every piece of the bar stays inside the
+   content lines (the label alone measured 115px and pushed the toggle off-screen) */
+@media (max-width: 639px) {
+  .nav__actions .btn .btn-label {
+    display: none;
+  }
+  .nav__actions .btn::after {
+    content: none;
+    display: none;
+  }
+}
+
+/* inside the phone sheet the actions are pinned to the bottom: the language menu opens up */
+.nav.is-open .lang-menu {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+/* --- recipe card: the foot holds the facts, then the actions on a rule --- */
+.recipe-card__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-2);
+  margin-top: auto;
+  padding-top: var(--s-2);
+  border-top: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.recipe-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--s-2);
+}
+.recipe-card__actions > .icon-btn {
+  width: 36px;
+  height: 36px;
+}
+.recipe-card__actions > .btn {
+  height: 34px;
+}
+.recipe-card__placeholder {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--s-2);
+  width: 100%;
+  height: 100%;
+  color: var(--muted);
+  background: color-mix(in oklab, var(--ink) 5%, var(--surface));
+}
+
+/* --- helpers --- */
+/* the kit's buttons say nothing about a disabled one: the action waits, the label stays readable */
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+/* on the narrowest phones a long label gives up its no-wrap: the button grows a line
+   instead of pushing the page sideways */
+@media (max-width: 479px) {
+  .btn {
+    white-space: normal;
+  }
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Timer toast entrance (positioning stays on the Tailwind translate utility) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Custom scrollbar styling for the inner panes & lists */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -27,9 +686,86 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(160, 160, 160, 0.3);
+  background: rgba(125, 12, 20, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(160, 160, 160, 0.5);
+  background: rgba(125, 12, 20, 0.45);
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(236, 228, 228, 0.25);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 228, 228, 0.45);
+}
+
+/* --- modal panels: their photograph and their own grids ---
+   The kit's unlayered rules beat Tailwind's layered utilities, so both fixes live here,
+   after the kit's links in index.html (same pattern as #sauvegarde .backup-grid). */
+/* the detail hero's photograph fills its 256/320px frame: the kit's `img, video {
+   height: auto }` beat the utility h-full, so the photo rendered at its natural ratio
+   and lay over the rating strip and the sections below it */
+.detail-hero__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+/* the caption sits on the photograph: a deeper scrim than the utility gradient, plus a
+   soft outline on the words, so white never lands on white whatever the photo shows */
+.detail-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.62) 34%,
+    rgba(0, 0, 0, 0.24) 66%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+.detail-hero__cap {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95), 0 1px 10px rgba(0, 0, 0, 0.7);
+}
+/* the kit's .grid (12 tracks, every child 1 / -1, kit gaps) is unlayered too and beats
+   the layered grid-cols-* / col-span-* / gap-* the modal markup asks for; each grid
+   re-declares that layout here */
+.modal-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+.modal-grid > * { grid-column: auto; }
+/* detail body: one column on a phone; from lg the 12-track split, info 5 / list 7 */
+.modal-grid--detail { gap: 2rem; }
+@media (min-width: 1024px) {
+  .modal-grid--detail { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .modal-grid--detail > :first-child { grid-column: span 5; }
+  .modal-grid--detail > :last-child { grid-column: span 7; }
+}
+/* the four macro cells, always four across */
+.modal-grid--macros {
+  gap: 0.5rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+/* the form rows: title 2/3 + category, photo next to source, and the time + macro rows
+   as 2 across on a phone, 4 from sm */
+@media (min-width: 640px) {
+  .modal-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .modal-grid--3 > :first-child { grid-column: span 2; }
+  .modal-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.modal-grid--24 {
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 640px) {
+  .modal-grid--24 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* --- the page travels to its section in JS (App.handleTabChange, SearchBar), never with
+   html { scroll-behavior: smooth }: CSS smooth also smooths the Tab key's focus scroll,
+   which has to land at once, and JS behavior: "smooth" ignores the kit's reduced-motion
+   guard, so those two call sites check prefers-reduced-motion themselves --- */
