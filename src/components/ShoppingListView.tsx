@@ -182,7 +182,7 @@ export const ShoppingListView: React.FC<ShoppingListViewProps> = ({ onGoToRecipe
           {/* on the inverse band the heading takes the ground's own ink (both grades);
               the icon sits inline so the words start on the container's left line */}
           <h2 id="courses-h" className="font-serif-display text-2xl sm:text-3xl font-bold">
-            <ShoppingCart className="w-7 h-7 mr-2.5 inline-block align-middle text-[var(--accent)]" aria-hidden="true" />
+            <ShoppingCart className="w-7 h-7 mr-2.5 inline-block align-middle text-(--accent)" aria-hidden="true" />
             <span>{t('shop.title')}</span>
           </h2>
           <p className="text-xs sm:text-sm muted mt-1">
@@ -344,7 +344,7 @@ export const ShoppingListView: React.FC<ShoppingListViewProps> = ({ onGoToRecipe
         onSubmit={handleAddManual}
         className="max-w-xl bg-white dark:bg-stone-900 rounded-2xl p-4 border border-stone-200/80 dark:border-stone-800 shadow-2xs flex flex-wrap items-end gap-2.5"
       >
-        <label className="flex flex-col gap-1 flex-1 min-w-[160px]">
+        <label className="flex flex-col gap-1 flex-1 min-w-40">
           <span className="t-label muted">{t('shop.fieldName')}</span>
           <input
             type="text"
