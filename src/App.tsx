@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { RecipeProvider, useRecipes } from './context/RecipeContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Header } from './components/Header';
@@ -12,6 +12,7 @@ import { BackupImportModal } from './components/BackupImportModal';
 import { TranslationProgressModal } from './components/TranslationProgressModal';
 import { TimerToast } from './components/TimerToast';
 import { SiteFooter } from './components/SiteFooter';
+import { Pagination } from './components/Pagination';
 import { Recipe } from './types/recipe';
 import { Plus, CookingPot } from 'lucide-react';
 import { initKit, refreshKit } from './kit';
@@ -26,7 +27,18 @@ const SECTION_ID: Record<Tab, string> = {
 };
 
 function AppContent() {
-  const { filteredRecipes, displayedRecipes, setOnlyFavorites, translationProgress } = useRecipes();
+  const {
+    filteredRecipes,
+    displayedRecipes,
+    setOnlyFavorites,
+    translationProgress,
+    activeCategory,
+    searchQuery,
+    selectedIngredientFilter,
+    onlyFavorites,
+    minRating,
+    sortBy,
+  } = useRecipes();
   const { t } = useLanguage();
 
   // Navigation tab: 'recipes' | 'favorites' | 'shopping' | 'backup'
@@ -37,6 +49,37 @@ function AppContent() {
   const selectedRecipe = displayedRecipes.find((r) => r.id === selectedRecipeId) || null;
   const [isNewRecipeModalOpen, setIsNewRecipeModalOpen] = useState(false);
   const [recipeToEdit, setRecipeToEdit] = useState<Recipe | null>(null);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
+
+  // Reset page to 1 whenever any filter or tab changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, searchQuery, selectedIngredientFilter, onlyFavorites, minRating, sortBy, currentTab]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredRecipes.length / itemsPerPage));
+  const validCurrentPage = Math.min(currentPage, totalPages);
+
+  const paginatedRecipes = useMemo(() => {
+    const start = (validCurrentPage - 1) * itemsPerPage;
+    return filteredRecipes.slice(start, start + itemsPerPage);
+  }, [filteredRecipes, validCurrentPage, itemsPerPage]);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.getElementById('recettes')?.scrollIntoView({
+      behavior: reduce ? 'auto' : 'smooth',
+      block: 'start',
+    });
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
 
   // The design kit's scripts (public/assets) load once React has committed, then re-measure
   // whenever the page's shape changes (a tab swaps its section in and out of the DOM).
@@ -77,7 +120,7 @@ function AppContent() {
   // the tabs move focus and filters, they do not swap the sections in and out.
   const featured = displayedRecipes.slice(0, 3);
   // one screen holds three cards; more than one row asks for the two-screen section
-  const recipesScreenCount = filteredRecipes.length > 3 ? 2 : 1;
+  const recipesScreenCount = paginatedRecipes.length > 3 ? 2 : 1;
   return (
     <>
       <Header
@@ -199,16 +242,27 @@ function AppContent() {
                   </button>
                 </div>
               ) : (
-                <div className="grid recipe-grid">
-                  {filteredRecipes.map((recipe) => (
-                    <RecipeCard
-                      key={recipe.id}
-                      recipe={recipe}
-                      onSelect={(r) => setSelectedRecipeId(r.id)}
-                      onEdit={handleEditRecipe}
-                    />
-                  ))}
-                </div>
+                <>
+                  <div className="grid recipe-grid">
+                    {paginatedRecipes.map((recipe) => (
+                      <RecipeCard
+                        key={recipe.id}
+                        recipe={recipe}
+                        onSelect={(r) => setSelectedRecipeId(r.id)}
+                        onEdit={handleEditRecipe}
+                      />
+                    ))}
+                  </div>
+
+                  <Pagination
+                    currentPage={validCurrentPage}
+                    totalPages={totalPages}
+                    totalItems={filteredRecipes.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={handlePageChange}
+                    onItemsPerPageChange={handleItemsPerPageChange}
+                  />
+                </>
               )}
             </div>
           </div>

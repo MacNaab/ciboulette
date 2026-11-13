@@ -183,6 +183,39 @@ export async function translateText(
 }
 
 /**
+ * Helper to clean and separate ingredient name and unit when translated.
+ * Handles cases where translation APIs localized or altered placeholder tags like [UNIT] to [UNIDAD], [UNITE], [EINHEIT].
+ */
+export function sanitizeIngredientNameAndUnit(
+  rawName: string,
+  rawUnit: string = ''
+): { name: string; unit: string } {
+  if (!rawName) return { name: '', unit: rawUnit };
+
+  // Match pattern like: "Pollo [UNIDAD] kg" or "Huevos [UNIT] ud"
+  const tagRegex = /^(.*?)\s*\[\s*(?:UNIT|UNIDAD|UNITE|UNIDADE|EINHEIT)\s*\]\s*(.*)$/i;
+  const match = rawName.match(tagRegex);
+
+  if (match) {
+    const cleanName = match[1].trim();
+    const extractedUnit = match[2].trim();
+    return {
+      name: cleanName || rawName,
+      unit: extractedUnit || rawUnit || ''
+    };
+  }
+
+  // Fallback: strip any remaining [UNIT] or [UNIDAD] tags
+  const cleanName = rawName.replace(/\[\s*(?:UNIT|UNIDAD|UNITE|UNIDADE|EINHEIT)\s*\]/gi, '').trim();
+  const cleanUnit = rawUnit ? rawUnit.replace(/\[\s*(?:UNIT|UNIDAD|UNITE|UNIDADE|EINHEIT)\s*\]/gi, '').trim() : '';
+
+  return {
+    name: cleanName,
+    unit: cleanUnit
+  };
+}
+
+/**
  * Translates a complete Recipe object into the target language.
  * Translates title, description, ingredient names and units, instructions, and chef tip.
  */
@@ -214,17 +247,11 @@ export async function translateRecipe(
 
     const translatedIngredients: Ingredient[] = recipe.ingredients.map((ing) => {
       const rawTranslated = translatedParts[partCursor++] || ing.name;
-      if (rawTranslated.includes('[UNIT]')) {
-        const [namePart, unitPart] = rawTranslated.split('[UNIT]').map(s => s.trim());
-        return {
-          ...ing,
-          name: namePart || ing.name,
-          unit: unitPart || ing.unit
-        };
-      }
+      const sanitized = sanitizeIngredientNameAndUnit(rawTranslated, ing.unit);
       return {
         ...ing,
-        name: rawTranslated || ing.name
+        name: sanitized.name || ing.name,
+        unit: sanitized.unit || ing.unit
       };
     });
 

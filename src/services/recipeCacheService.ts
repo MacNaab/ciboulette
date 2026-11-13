@@ -1,6 +1,7 @@
 import { SupportedLanguage } from '../types/i18n';
 import { Recipe, Ingredient } from '../types/recipe';
 import { DEFAULT_RECIPES_TRANSLATIONS, PreTranslatedContent } from '../data/defaultRecipesTranslated';
+import { sanitizeIngredientNameAndUnit } from './translationService';
 
 const STORAGE_CACHE_KEY = 'ciboulette_recipe_translations_v2';
 
@@ -115,10 +116,14 @@ export function resolveRecipeForLanguage(recipe: Recipe, targetLang: SupportedLa
   // Map ingredients keeping quantities and IDs intact
   const translatedIngredients: Ingredient[] = recipe.ingredients.map((ing, idx) => {
     const matched = cached.ingredients.find(c => c.id === ing.id) || cached.ingredients[idx];
+    const rawName = matched?.name || ing.name;
+    const rawUnit = matched?.unit || ing.unit;
+    const sanitized = sanitizeIngredientNameAndUnit(rawName, rawUnit);
+
     return {
       ...ing,
-      name: matched?.name || ing.name,
-      unit: matched?.unit || ing.unit
+      name: sanitized.name || ing.name,
+      unit: sanitized.unit || ing.unit
     };
   });
 

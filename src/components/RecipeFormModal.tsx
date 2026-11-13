@@ -96,10 +96,13 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
   const [dragOverStepIndex, setDragOverStepIndex] = useState<number | null>(null);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showUnsavedConfirm, setShowUnsavedConfirm] = useState<boolean>(false);
 
   // Sync state whenever initialRecipe changes (for editing) or modal opens
   useEffect(() => {
     if (!isOpen) return;
+
+    setShowUnsavedConfirm(false);
 
     if (initialRecipe) {
       setTitle(initialRecipe.title);
@@ -177,6 +180,80 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
       setTranslationNotice(null);
     }
   }, [initialRecipe, isOpen]);
+
+  // Check if form contains unsaved changes
+  const hasUnsavedChanges = (): boolean => {
+    if (!initialRecipe) {
+      // New recipe
+      return Boolean(
+        title.trim() ||
+        description.trim() ||
+        rawText.trim() ||
+        chefTip.trim() ||
+        image.trim() ||
+        sourceUrl.trim() ||
+        calories.trim() ||
+        proteins.trim() ||
+        carbs.trim() ||
+        fats.trim() ||
+        ingredients.some((i) => i.name.trim().length > 0) ||
+        instructions.some((i) => i.text.trim().length > 0)
+      );
+    } else {
+      // Editing existing recipe
+      const origCalories = initialRecipe.macros?.calories ?? initialRecipe.calories;
+      const caloriesDiff = (calories || '') !== (origCalories ? origCalories.toString() : '');
+      const proteinsDiff = (proteins || '') !== (initialRecipe.macros?.proteins !== undefined ? initialRecipe.macros.proteins.toString() : '');
+      const carbsDiff = (carbs || '') !== (initialRecipe.macros?.carbs !== undefined ? initialRecipe.macros.carbs.toString() : '');
+      const fatsDiff = (fats || '') !== (initialRecipe.macros?.fats !== undefined ? initialRecipe.macros.fats.toString() : '');
+
+      const titleDiff = title.trim() !== initialRecipe.title;
+      const categoryDiff = category !== initialRecipe.category;
+      const descDiff = description.trim() !== (initialRecipe.description || '');
+      const prepDiff = Number(prepTime) !== initialRecipe.prepTime;
+      const cookDiff = Number(cookTime) !== initialRecipe.cookTime;
+      const servDiff = Number(servings) !== initialRecipe.servings;
+      const diffDiff = difficulty !== initialRecipe.difficulty;
+      const imageDiff = image.trim() !== (initialRecipe.image || '');
+      const sourceDiff = sourceUrl.trim() !== (initialRecipe.sourceUrl || '');
+      const chefTipDiff = chefTip.trim() !== (initialRecipe.chefTip || '');
+
+      const origIngsStr = initialRecipe.ingredients.map((i) => `${i.name}|${i.quantity}|${i.unit}`).join(';');
+      const currentIngsStr = ingredients.map((i) => `${i.name.trim()}|${i.quantity}|${i.unit.trim()}`).join(';');
+      const ingsDiff = origIngsStr !== currentIngsStr;
+
+      const origStepsStr = (initialRecipe.instructions || []).join(';');
+      const currentStepsStr = instructions.map((i) => i.text.trim()).filter(Boolean).join(';');
+      const stepsDiff = origStepsStr !== currentStepsStr;
+
+      return (
+        titleDiff ||
+        categoryDiff ||
+        descDiff ||
+        prepDiff ||
+        cookDiff ||
+        servDiff ||
+        diffDiff ||
+        caloriesDiff ||
+        proteinsDiff ||
+        carbsDiff ||
+        fatsDiff ||
+        imageDiff ||
+        sourceDiff ||
+        chefTipDiff ||
+        ingsDiff ||
+        stepsDiff
+      );
+    }
+  };
+
+  const handleAttemptClose = () => {
+    if (hasUnsavedChanges()) {
+      setShowUnsavedConfirm(true);
+    } else {
+      onClose();
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -495,12 +572,50 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
   return (
     <div
       className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6"
-      onClick={onClose}
+      onClick={(e) => e.stopPropagation()}
     >
       <div
         className="relative w-full max-w-3xl bg-white dark:bg-stone-900 rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 overflow-hidden my-6 max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Unsaved Changes Confirmation Modal Overlay */}
+        {showUnsavedConfirm && (
+          <div className="absolute inset-0 z-50 bg-stone-900/80 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 p-6 max-w-md w-full shadow-2xl text-center space-y-4">
+              <div className="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center">
+                <RotateCcw className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="font-serif-display text-lg font-bold text-stone-900 dark:text-stone-100">
+                  {t('form.unsavedTitle')}
+                </h3>
+                <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
+                  {t('form.unsavedConfirm')}
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowUnsavedConfirm(false);
+                    onClose();
+                  }}
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs transition-colors cursor-pointer shadow-2xs"
+                >
+                  {t('form.unsavedYes')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowUnsavedConfirm(false)}
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 font-semibold text-xs transition-colors cursor-pointer"
+                >
+                  {t('form.unsavedNo')}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -519,7 +634,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleAttemptClose}
             className="p-1.5 rounded-lg text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
@@ -1149,7 +1264,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                 <div className="flex items-center gap-3 ml-auto">
                   <button
                     type="button"
-                    onClick={onClose}
+                    onClick={handleAttemptClose}
                     className="px-4 py-2.5 text-xs font-semibold rounded-xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
                   >
                     {t('form.cancel')}

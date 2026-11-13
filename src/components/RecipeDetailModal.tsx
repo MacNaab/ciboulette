@@ -599,11 +599,6 @@ export const RecipeDetailModal: React.FC<RecipeDetailModalProps> = ({
                       <span>{t('card.edit')}</span>
                     </button>
                   )}
-                  {recipe.isCustom && (
-                    <span className="text-[11px] text-stone-400 dark:text-stone-500 hidden sm:inline">
-                      ({t('card.customBadge')})
-                    </span>
-                  )}
                 </div>
 
                 {/* Delete Recipe Button */}

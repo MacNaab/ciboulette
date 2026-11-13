@@ -137,7 +137,11 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* the kit's system.js owns this button (bars/cross, aria-expanded, Escape) */}
-        <button type="button" className="nav__toggle" aria-expanded="false" aria-label={t('nav.menu')}></button>
+        <button type="button" className="nav__toggle" aria-expanded="false" aria-label={t('nav.menu')}>
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+            <path d="M2 5h14M2 13h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
     </header>
   );

@@ -48,9 +48,6 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSelect, onEdit
         ) : (
           <div className="recipe-card__placeholder">
             <ChefHat aria-hidden="true" style={{ width: 32, height: 32 }} />
-            <span className="text-xs font-medium uppercase tracking-wider text-center">
-              {getCategoryText(recipe.category)}
-            </span>
           </div>
         )}
 
@@ -65,12 +62,10 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSelect, onEdit
           <Heart className={recipe.isFavorite ? 'text-rose-700 fill-current' : ''} />
         </button>
 
-        {/* Custom recipe badge */}
-        {recipe.isCustom && (
-          <span className="absolute top-3 left-3 text-[11px] font-medium px-2 py-0.5 rounded-md bg-stone-900/85 text-white backdrop-blur-xs">
-            {t('card.customBadge')}
-          </span>
-        )}
+        {/* Category badge */}
+        <span className="absolute top-3 left-3 text-[11px] font-medium px-2 py-0.5 rounded-md bg-stone-900/85 text-white backdrop-blur-xs capitalize">
+          {getCategoryText(recipe.category)}
+        </span>
 
         {/* Source link badge if available */}
         {recipe.sourceUrl && (
@@ -90,8 +85,6 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSelect, onEdit
 
       {/* Metadata */}
       <div className="flex items-center flex-wrap gap-1.5 text-xs text-stone-600 dark:text-stone-400 mb-1.5">
-        <span className="capitalize">{getCategoryText(recipe.category)}</span>
-        <span aria-hidden="true">·</span>
         <span>{getDifficultyText(recipe.difficulty)}</span>
         {recipe.macros?.proteins !== undefined ? (
           <>

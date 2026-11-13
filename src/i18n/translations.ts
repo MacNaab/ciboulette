@@ -172,6 +172,10 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     'form.submitCreate': 'Enregistrer la recette dans mon carnet',
     'form.cancel': 'Annuler',
     'form.requiredError': 'Veuillez renseigner au minimum un titre et au moins un ingrédient.',
+    'form.unsavedTitle': 'Modifications non enregistrées',
+    'form.unsavedConfirm': 'Vous avez des modifications en cours. Voulez-vous vraiment fermer et perdre vos saisies ?',
+    'form.unsavedYes': 'Oui, fermer',
+    'form.unsavedNo': 'Continuer l’édition',
 
     // Shopping List
     'shop.title': 'Liste de courses',
@@ -216,7 +220,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     'backup.resetButton': 'Réinitialiser les données',
     'backup.resetConfirm': 'Êtes-vous certain de vouloir réinitialiser vos recettes ? Les recettes personnalisées seront effacées si vous ne les avez pas exportées.',
     'backup.importSuccess': '{count} recette(s) importée(s) avec succès !',
-    'backup.importError': 'Fichier JSON invalide. Veuillez vérifier le format de la sauvegarde.'
+    'backup.importError': 'Fichier JSON invalide. Veuillez vérifier le format de la sauvegarde.',
+
+    // Pagination
+    'pagination.showing': 'Affichage de {from} à {to} sur {total} recette(s)',
+    'pagination.pageInfo': 'Page {current} sur {total}',
+    'pagination.previous': 'Précédent',
+    'pagination.next': 'Suivant',
+    'pagination.first': 'Première page',
+    'pagination.last': 'Dernière page',
+    'pagination.perPage': 'Afficher par page :'
   },
 
   en: {
@@ -389,6 +402,10 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     'form.submitCreate': 'Save recipe to my book',
     'form.cancel': 'Cancel',
     'form.requiredError': 'Please provide at least a recipe title and at least one ingredient.',
+    'form.unsavedTitle': 'Unsaved changes',
+    'form.unsavedConfirm': 'You have unsaved changes. Are you sure you want to close and discard your input?',
+    'form.unsavedYes': 'Yes, close',
+    'form.unsavedNo': 'Continue editing',
 
     // Shopping List
     'shop.title': 'Shopping List',
@@ -433,7 +450,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     'backup.resetButton': 'Reset data',
     'backup.resetConfirm': 'Are you sure you want to reset? Custom recipes will be lost unless previously exported.',
     'backup.importSuccess': '{count} recipe(s) successfully imported!',
-    'backup.importError': 'Invalid JSON file. Please check the backup format.'
+    'backup.importError': 'Invalid JSON file. Please check the backup format.',
+
+    // Pagination
+    'pagination.showing': 'Showing {from} to {to} of {total} recipe(s)',
+    'pagination.pageInfo': 'Page {current} of {total}',
+    'pagination.previous': 'Previous',
+    'pagination.next': 'Next',
+    'pagination.first': 'First page',
+    'pagination.last': 'Last page',
+    'pagination.perPage': 'Show per page:'
   },
 
   es: {
@@ -606,6 +632,10 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     'form.submitCreate': 'Guardar receta en mi cuaderno',
     'form.cancel': 'Cancelar',
     'form.requiredError': 'Por favor introduce al menos un título y al menos un ingrediente.',
+    'form.unsavedTitle': 'Cambios no guardados',
+    'form.unsavedConfirm': 'Tienes cambios sin guardar. ¿Seguro que deseas cerrar y perder lo que has escrito?',
+    'form.unsavedYes': 'Sí, cerrar',
+    'form.unsavedNo': 'Continuar editando',
 
     // Shopping List
     'shop.title': 'Lista de compras',
@@ -650,7 +680,16 @@ export const TRANSLATIONS: Record<SupportedLanguage, Record<string, string>> = {
     'backup.resetButton': 'Restablecer datos',
     'backup.resetConfirm': '¿Seguro que deseas restablecer? Las recetas personalizadas se perderán salvo que las hayas exportado.',
     'backup.importSuccess': '¡{count} receta(s) importada(s) con éxito!',
-    'backup.importError': 'Archivo JSON no válido. Por favor revisa el formato.'
+    'backup.importError': 'Archivo JSON no válido. Por favor revisa el formato.',
+
+    // Pagination
+    'pagination.showing': 'Mostrando {from} a {to} de {total} receta(s)',
+    'pagination.pageInfo': 'Página {current} de {total}',
+    'pagination.previous': 'Anterior',
+    'pagination.next': 'Siguiente',
+    'pagination.first': 'Primera página',
+    'pagination.last': 'Última página',
+    'pagination.perPage': 'Mostrar por página:'
   }
 };
 
